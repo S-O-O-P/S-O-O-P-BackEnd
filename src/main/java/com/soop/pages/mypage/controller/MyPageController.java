@@ -3,6 +3,8 @@ package com.soop.pages.mypage.controller;
 import com.soop.pages.honeypot.controller.HoneypotResponseMessage;
 import com.soop.pages.mypage.model.dto.*;
 import com.soop.pages.mypage.model.service.MyPageService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Tag(name = "마이페이지 API", description = "마이페이지 관련 기능을 제공하는 API입니다.")
 @RestController
 @RequestMapping("/mypage")
 public class MyPageController {
@@ -26,6 +29,7 @@ public class MyPageController {
     }
 
     // 유저평가 조회
+    @Operation(summary = "유저 평가 조회", description = "특정 유저의 평가 정보를 조회합니다.")
     @GetMapping("/rating/{userCode}")
     public ResponseEntity<List<UserRatingDTO>> getLoggedInUserRating(@PathVariable int userCode) {
         List<UserRatingDTO> loggedInUserRatingList = myPageService.getLoggedInUserRating(userCode);
@@ -33,6 +37,7 @@ public class MyPageController {
     }
 
     // 평점 항목 조회
+    @Operation(summary = "평점 항목 조회", description = "평점 항목 리스트를 조회합니다.")
     @GetMapping("/rating")
     public ResponseEntity<List<RatingDTO>> getRatingList() {
         List<RatingDTO> ratingList = myPageService.getRatingList();
@@ -40,6 +45,7 @@ public class MyPageController {
     }
 
     // 유저평점 등록(평가하기)
+    @Operation(summary = "유저 평점 등록", description = "새로운 유저 평가를 등록합니다.")
     @PostMapping("/userrating")
     public ResponseEntity<EvaluateUserRatingDTO> evaluateUserRating(@RequestBody EvaluateUserRatingDTO newEvaluate) {
         EvaluateUserRatingDTO evaluateUserRating = myPageService.evaluateUserRating(newEvaluate);
@@ -47,6 +53,7 @@ public class MyPageController {
     }
 
     // 내가 만든 허니팟 조회
+    @Operation(summary = "내가 만든 허니팟 조회", description = "사용자가 만든 허니팟 목록을 조회합니다.")
     @GetMapping("/myhoneypots")
     public ResponseEntity<List<MyHoneypotDTO>> getMyHoneypotsList() {
         List<MyHoneypotDTO> myHoneypotList = myPageService.getMyHoneypotList();
@@ -54,7 +61,7 @@ public class MyPageController {
     }
 
     // 참여중인 허니팟 조회
-
+    @Operation(summary = "참여중인 허니팟 조회", description = "사용자가 참여중인 허니팟 목록을 조회합니다.")
     @GetMapping("/participated")
     public ResponseEntity<List<ParticipatingHoneypotDTO>> getParticipatingHoneypotList() {
         List<ParticipatingHoneypotDTO> participatingHoneypotList = myPageService.getParticipatingHoneypotList();
@@ -62,6 +69,7 @@ public class MyPageController {
     }
 
     // 유저 프로필 조회(닉네임, 사진, 자기소개, 관심사)
+    @Operation(summary = "유저 프로필 조회", description = "특정 유저의 프로필 정보를 조회합니다.")
     @GetMapping("/{userCode}")
     public ResponseEntity<UserProfileDTO> getUserProfile(@PathVariable Integer userCode) {
 //        try {
@@ -72,6 +80,7 @@ public class MyPageController {
 //        }
     }
     // 유저 프로필 수정(닉네임, 사진, 자기소개, 관심사)
+    @Operation(summary = "유저 프로필 수정", description = "유저의 프로필 정보를 수정합니다.")
     @PutMapping("/{userCode}")
 //    public ResponseEntity<String> updateUserProfile(@PathVariable Integer userCode, @RequestBody UserProfileUpdateDTO dto) {
 //        try {
@@ -101,6 +110,7 @@ public class MyPageController {
     }
 
     // 관심사 항목 조회
+    @Operation(summary = "관심사 항목 조회", description = "관심사 항목 리스트를 조회합니다.")
     @GetMapping("/interest")
     public ResponseEntity<List<InterestDTO>> getInterest() {
         List<InterestDTO> interestList = myPageService.getInterest();
@@ -108,6 +118,7 @@ public class MyPageController {
     }
 
     // 댓글 조회
+    @Operation(summary = "내 댓글 조회", description = "사용자가 작성한 댓글 목록을 조회합니다.")
     @GetMapping("/mycomment")
     public ResponseEntity<List<MyCommentDTO>> getMyComments() {
         List<MyCommentDTO> myCommentList = myPageService.getMyComments();
@@ -115,6 +126,7 @@ public class MyPageController {
     }
 
     // 문의 내역 조회
+    @Operation(summary = "문의 내역 조회", description = "사용자의 문의 내역을 조회합니다.")
     @GetMapping("/myinquiry/{userCode}")
     public ResponseEntity<List<MyInquiryDTO>> getMyInquiry(@PathVariable int userCode) {
         List<MyInquiryDTO> myInquiryList = myPageService.getMyInquiry(userCode);
@@ -122,6 +134,7 @@ public class MyPageController {
     }
 
     // 진행완료된 허니팟 조회(유저평가멤버조회)
+    @Operation(summary = "진행완료된 허니팟 조회", description = "진행이 완료된 허니팟 목록을 조회합니다.")
     @GetMapping("/finished")
     public ResponseEntity<List<FinishedHoneypotDTO>> getFinishedHoneypot() {
         List<FinishedHoneypotDTO> finishedHoneypotList = myPageService.getFinishedHoneypot();
@@ -129,6 +142,7 @@ public class MyPageController {
     }
 
     // 로그인 유저 리프레쉬 조회
+    @Operation(summary = "로그인 유저 리프레시 조회", description = "로그인한 유저의 리프레시 토큰 정보를 조회합니다.")
     @GetMapping("logincheck")
     public ResponseEntity<List<RefreshDTO>> getUserRef() {
         List<RefreshDTO> refreshInfo = myPageService.getUserRef();
@@ -148,6 +162,7 @@ public class MyPageController {
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating profile picture");
 //        }
 //    }
+    @Operation(summary = "프로필 사진 수정", description = "사용자의 프로필 사진을 수정합니다.")
     @PutMapping("/profile-pic/{userCode}")
     public ResponseEntity<?> updateProfilePic(@PathVariable Integer userCode,
                                               @RequestBody Map<String, String> payload) {
@@ -159,9 +174,4 @@ public class MyPageController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating profile picture");
         }
     }
-
-
-
-
-
 }
