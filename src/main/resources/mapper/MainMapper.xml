@@ -3,6 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.soop.pages.main.model.dto.SampleDTO">
+<mapper namespace="com.soop.pages.main.model.dao.MainMapper">
+    <resultMap id="userInterestResultMap" type="com.soop.pages.main.model.dto.UserInterestDTO">
+        <id property="userCode" column="USER_CODE"/>
+        <id property="interestCode" column="INTEREST_CODE"/>
+    </resultMap>
 
+    <!--  얼리버드 공연/전시 상세 정보 조회  -->
+    <select id="selectUserInterestByCode" resultMap="userInterestResultMap">
+        SELECT
+              INTEREST_CODE
+        FROM  INTEREST_OF_USER
+        WHERE USER_CODE=#{userCode}
+    </select>
 </mapper>
