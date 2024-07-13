@@ -109,12 +109,14 @@
         INSERT INTO REFRESHENTITY
         (
         USER_CODE,
+        PROFILE_PIC,
         SIGNUP_PLATFORM,
         REFRESH,
         EXPIRATION
         )
         SELECT
         USER_CODE,
+        #{profilePic},
         #{signupPlatform},
         #{refresh},
         #{expiration}
@@ -127,7 +129,8 @@
 
     <select id="searchRefreshEntity" parameterType="com.soop.jwtsecurity.entityDTO.RefreshEntity">
         select
-                A.REFRESH
+                A.REFRESH,
+                B.PROFILE_PIC
             from REFRESHENTITY A
             join LINKBEE_USER B on A.SIGNUP_PLATFORM = B.SIGNUP_PLATFORM
         where A.SIGNUP_PLATFORM = #{signupPlatform}
@@ -173,6 +176,14 @@
         )
     </insert>
 
+    <!-- 프로필 사진 추가 -->
+    <select id="getProfilePic" parameterType="string" resultType="string">
+        SELECT
+                B.PROFILE_PIC
+          FROM REFRESHENTITY A
+          JOIN LINKBEE_USER B on A.SIGNUP_PLATFORM = B.SIGNUP_PLATFORM
+        where A.SIGNUP_PLATFORM = #{signupPlatform}
+    </select>
 
 
 </mapper>

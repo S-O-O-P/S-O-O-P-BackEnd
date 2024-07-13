@@ -29,4 +29,6 @@ public interface UserMapper {
     void saveAboutMe(@Param("aboutme") String aboutme, @Param("signupPlatform") String signupPlatform,@Param("nickname") String nickname);
 
     void saveUserInterest(@Param("userCode") int userCode, @Param("interestCode") int interestCode);
+
+    String getProfilePic(String signupPlatform);
 }

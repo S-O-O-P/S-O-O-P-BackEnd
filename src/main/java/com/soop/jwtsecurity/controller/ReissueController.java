@@ -32,7 +32,6 @@ public class ReissueController {
     public void reissue(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String accessToken = null;
         Integer userCode = (Integer) requestBody.get("userCode");
-        String profilePic = (String) requestBody.get("profilePic");
 
         // 쿠키에서 액세스 토큰 추출
         Cookie[] cookies = request.getCookies();
@@ -73,6 +72,9 @@ public class ReissueController {
             response.sendRedirect("http://localhost:3001/login?error=refresh_token_missing");
             return;
         }
+
+        // 프로필 사진 정보 조회
+        String profilePic = userMapper.getProfilePic(signupPlatform);
 
         // 리프레시 토큰 유효성 검사
         try {
