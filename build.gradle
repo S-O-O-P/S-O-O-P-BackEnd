@@ -41,7 +41,8 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.3' // 0.11.5 버전과 구현 방식 차이가 많이남.
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
-
+	implementation 'javax.servlet:javax.servlet-api:4.0.1'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'com.google.firebase:firebase-admin:9.1.1'
 	implementation 'com.google.cloud:google-cloud-storage:2.20.1'
 
