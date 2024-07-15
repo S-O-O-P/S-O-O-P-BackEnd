@@ -21,11 +21,11 @@ public class FinishedHoneypotDTO {
     private String poster;
     private String approvalCount;
     private int totalMember;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date regDate;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date eventDate;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date endDate;
     private String closureStatus;
     private int memberCode;

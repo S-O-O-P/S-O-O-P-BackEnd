@@ -4,6 +4,9 @@ GET http://localhost:8081/mypage/rating/2
 ### 유저평가 항목 조회
 GET http://localhost:8081/mypage/rating
 
+### 테스트
+GET http://localhost:8081/mypage
+
 ### 평점 등록 테스트
 POST http://localhost:8081/mypage/userrating
 Content-Type: application/json
