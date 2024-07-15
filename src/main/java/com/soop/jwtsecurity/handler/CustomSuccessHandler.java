@@ -6,6 +6,7 @@ import com.soop.jwtsecurity.entityDTO.RefreshEntity;
 import com.soop.jwtsecurity.entityDTO.UserEntity;
 import com.soop.jwtsecurity.jwt.JWTUtil;
 import com.soop.jwtsecurity.mapper.UserMapper;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
+@Tag(name = "커스텀 로그인 성공 핸들러" , description = "SimpleUrlAuthenticationSuccessHandler 커스텀")
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 

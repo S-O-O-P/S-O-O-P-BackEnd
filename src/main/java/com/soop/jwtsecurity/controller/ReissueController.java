@@ -4,6 +4,8 @@ import com.soop.jwtsecurity.entityDTO.RefreshEntity;
 import com.soop.jwtsecurity.jwt.JWTUtil;
 import com.soop.jwtsecurity.mapper.UserMapper;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.io.IOException;
 import java.util.Map;
 
+@Tag(name="토큰 재발급 컨트롤러")
 @Controller
 @ResponseBody
 public class ReissueController {
@@ -28,6 +31,7 @@ public class ReissueController {
         this.userMapper = userMapper;
     }
 
+    @Operation(summary = "토큰 재발급 REST API", description = "클라이언트 에게서 access토큰을 확인 DB에 저장된 refresh 토큰과 비교하여 재발급")
     @PostMapping("/reissue")
     public void reissue(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String accessToken = null;
@@ -99,7 +103,7 @@ public class ReissueController {
 
         response.setStatus(HttpStatus.OK.value());
     }
-
+    @Operation(summary = "쿠키 생성 메소드")
     private void createAndAddCookie(HttpServletResponse response, String key, String value) {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(5 * 60); // 20 minutes
