@@ -32,7 +32,7 @@ WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
 
 # Copy the application.yml file
-COPY src/main/resources/application.yml application.yml
+COPY src/main/resources/application.yml /app/application.yml
 
 # Expose port
 EXPOSE 8081
