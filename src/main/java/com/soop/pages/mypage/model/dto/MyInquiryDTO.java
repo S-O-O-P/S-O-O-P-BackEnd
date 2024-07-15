@@ -17,11 +17,11 @@ public class MyInquiryDTO {
     private String title;
     private String content;
     private int userCode;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date inquiryDate;
     private String answerStatus;
     private String answer;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date answerDate;
 
 }

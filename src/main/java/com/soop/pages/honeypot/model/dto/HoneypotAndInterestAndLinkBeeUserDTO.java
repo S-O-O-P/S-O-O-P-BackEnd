@@ -21,11 +21,11 @@ public class HoneypotAndInterestAndLinkBeeUserDTO {
     private String poster;                  // 포스터(썸네일)
     private String region;                  // 지역
     private int totalMember;                // 총인원
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date regDate;                   // 등록일
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date eventDate;                 // 모임일
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date endDate;                   // 모집종료일
     private String visibilityStatus;        // 활성화 여부
     private String closureStatus;           // 마감 여부

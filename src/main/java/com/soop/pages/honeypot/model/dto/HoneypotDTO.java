@@ -36,8 +36,11 @@ public class HoneypotDTO {
     private String poster;
     private String region;
     private int totalMember;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date regDate;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date eventDate;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date endDate;
     private String visibilityStatus;
     private String closureStatus;
