@@ -4,6 +4,9 @@ FROM eclipse-temurin:17 AS build
 # Set the working directory
 WORKDIR /app
 
+# Add a unique file to ensure unique layers
+COPY unique-backend-file.txt .
+
 # Copy the Gradle wrapper and other necessary files
 COPY gradlew .
 COPY gradle gradle
