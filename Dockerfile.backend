@@ -1,5 +1,0 @@
-FROM eclipse-temurin:17
-ARG BACKEND_VERSION
-COPY ./build/libs/*.jar app.jar
-RUN echo "backend image $BACKEND_VERSION" > /unique_layer_backend.txt
-CMD ["java", "-jar", "/app.jar"]
