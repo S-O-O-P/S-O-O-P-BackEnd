@@ -17,8 +17,9 @@ public class MyCommentDTO {
     private String honeypotTitle;
     private String userCode;
     private String content;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime writingTime;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime updateTime;
     private String userType;
 

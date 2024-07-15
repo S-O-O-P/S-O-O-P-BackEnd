@@ -17,7 +17,7 @@ public class ParticipatingHoneypotDTO {
     private String honeypotTitle;
     private String closureStatus;
     private String interestName;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date eventDate;
     private String region;
     private int approvedCount;
@@ -25,7 +25,7 @@ public class ParticipatingHoneypotDTO {
     private int userCode;
     private String nickname;
     private String decisionStatus;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date decisionDate;
 
 }
