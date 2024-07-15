@@ -31,5 +31,11 @@ WORKDIR /app
 # Copy the built application from the build stage
 COPY --from=build /app/build/libs/*.jar app.jar
 
+# Copy the application.yml file
+COPY src/main/resources/application.yml application.yml
+
+# Expose port
+EXPOSE 8081
+
 # Run the application
 CMD ["java", "-jar", "app.jar"]
