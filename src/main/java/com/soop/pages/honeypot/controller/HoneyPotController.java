@@ -73,7 +73,6 @@ public class HoneyPotController {
 
         // 응답 데이터 설정
         HoneypotAndInterestAndLinkBeeUserDTO foundHoneypot = honeyPotService.findByHoneypotCode(honeypotCode);
-
         System.out.println(foundHoneypot);
 
         Map<String, Object> responseMap = new HashMap<>();

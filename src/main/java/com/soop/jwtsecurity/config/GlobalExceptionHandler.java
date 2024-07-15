@@ -1,38 +1,55 @@
 package com.soop.jwtsecurity.config;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.NoSuchElementException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ModelAndView handleInternalServerError(HttpServletRequest request, Exception ex) {
-        return new ModelAndView("redirect:/error/500");
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Void> handleNotFound(HttpServletRequest request, NoSuchElementException ex) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/error/404");
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
     @ExceptionHandler(org.springframework.web.servlet.NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ModelAndView handleNotFound(HttpServletRequest request, Exception ex) {
-        return new ModelAndView("redirect:/error/404");
+    public ResponseEntity<Void> handleNoHandlerFound(HttpServletRequest request, Exception ex) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/error/404");
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
-    @ExceptionHandler(ForbiddenException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ModelAndView handleAccessDenied(HttpServletRequest request, Exception ex) {
-        return new ModelAndView("redirect:/error/403");
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<Void> handleInternalServerError(HttpServletRequest request, Exception ex) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/error/500");
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ModelAndView handleBadRequest(HttpServletRequest request, Exception ex) {
-        return new ModelAndView("redirect:/error/400");
+    public ResponseEntity<Void> handleBadRequest(HttpServletRequest request, IllegalArgumentException ex) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/error/400");
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<Void> handleAccessDenied(HttpServletRequest request, ForbiddenException ex) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/error/403");
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 }
