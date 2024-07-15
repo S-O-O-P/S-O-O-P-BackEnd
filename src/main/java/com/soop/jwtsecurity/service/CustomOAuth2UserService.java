@@ -4,6 +4,8 @@ package com.soop.jwtsecurity.service;
 import com.soop.jwtsecurity.dto.*;
 import com.soop.jwtsecurity.entityDTO.UserEntity;
 import com.soop.jwtsecurity.mapper.UserMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
+@Tag(name = "커스텀 OAuth2 서비스", description = "DefaultOAuth2UserService 활용")
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
@@ -22,6 +25,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         this.userMapper = userMapper;
     }
 
+    @Operation(summary = "OAuth2 유저 확인", description = "naver,google,kakao 등 플랫폼 비교")
     @Override
     @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -77,6 +81,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             return new CustomOAuth2User(userDTO);
         }
     }
+    @Operation(summary = "성별 번역", description = "성별 ex)m,male = 남자")
     private String convertGender(String gender) {
         if (gender == null) {
             return "구글일 경우 성별 입력받기 메소드 추가가 될 자리";

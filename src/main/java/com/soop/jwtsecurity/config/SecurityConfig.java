@@ -6,7 +6,8 @@ import com.soop.jwtsecurity.jwt.JWTFilter;
 import com.soop.jwtsecurity.jwt.JWTUtil;
 import com.soop.jwtsecurity.mapper.UserMapper;
 import com.soop.jwtsecurity.service.CustomOAuth2UserService;
-import jakarta.servlet.http.HttpServletRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,9 +19,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.Collections;
 
+import java.util.Arrays;
+
+@Tag(name = "시큐리티 설정", description = "시큐리티 설정 파일 입니다.")
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -37,6 +39,7 @@ public class SecurityConfig {
         this.userMapper = userMapper;
     }
 
+    @Operation(summary = "시큐리티 필터 체인", description = "시큐리티 필터체인입니다.")
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource()));
@@ -58,10 +61,11 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Operation(summary = "CORS 설정", description = " CROSS ALLOWED ORIGIN 설정")
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3001","http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3001","http://localhost:3002"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With", "Access-Token", "Refresh-Token"));

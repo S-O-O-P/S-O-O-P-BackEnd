@@ -1,7 +1,10 @@
 package com.soop.jwtsecurity.dto;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.util.Map;
 
+@Tag(name = "Google Oauth2 응답")
 public class GoogleResponse implements OAuth2Response {
 
     private final Map<String, Object> attribute;
