@@ -3,13 +3,17 @@ package com.soop.jwtsecurity.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+@Tag(name = "JWT 유틸 설정",description = "secret 설정")
 @Component
 public class JWTUtil {
 
@@ -42,8 +46,6 @@ public class JWTUtil {
     public String getCategory(String token) {
         return getClaims(token).get("category", String.class);
     }
-
-    public String getProfilePic(String token) { return getClaims(token).get("profilePic", String.class);}
 
     public String createJwt(String category, String signupPlatform, String role,int userCode, String profilePic, Long expiredMs) {
         return Jwts.builder()
@@ -87,18 +89,5 @@ public class JWTUtil {
 
     public String getSignupPlatformFromToken(String token) {
         return getClaims(token).get("signupPlatform", String.class);
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            getClaims(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public int getuserCode(String access) {
-        return getClaims(access).get("userCode", int.class);
     }
 }
