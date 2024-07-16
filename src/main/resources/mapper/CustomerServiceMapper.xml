@@ -44,7 +44,7 @@
         NOTICE_CODE,
         TITLE
         FROM NOTICE
-        ORDER BY REG_DATE DESC
+        ORDER BY NOTICE_CODE DESC
         LIMIT 0,5;
     </select>
 
@@ -60,7 +60,7 @@
                B.NICKNAME
           FROM NOTICE A
           LEFT JOIN LINKBEE_USER B ON A.USER_CODE = B.USER_CODE
-         ORDER BY REG_DATE DESC;
+         ORDER BY NOTICE_CODE DESC
     </select>
 
     <select id="noticeDetail" resultMap="NoticeResultMap" parameterType="String">
