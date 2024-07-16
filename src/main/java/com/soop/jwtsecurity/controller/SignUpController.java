@@ -26,20 +26,13 @@ public class SignUpController {
     @Operation(summary = "추가 정보 입력 REST API", description = "자기소개가 null 값이 회원에게 추가 정보 입력 받는 메소드")
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@RequestBody UserSignUpDTO userSignUpDTO) {
-        userMapper.saveAboutMe(userSignUpDTO.getAboutMe(), userSignUpDTO.getSignupPlatform(), userSignUpDTO.getNickName());
+        userMapper.saveAboutMe(userSignUpDTO.getAboutMe(), userSignUpDTO.getSignupPlatform(), userSignUpDTO.getNickName(), userSignUpDTO.getGender());
         int userCode = userMapper.findBySignupPlatform(userSignUpDTO.getSignupPlatform()).getUserCode();
 
-        // Save interests
         List<Integer> interestCodes = userSignUpDTO.getSelectedInterests();
         for (Integer interestCode : interestCodes) {
             userMapper.saveUserInterest(userCode, interestCode);
         }
-
-//        System.out.println("userCode: "+ userCode);
-//        System.out.println("Received aboutMe: " + userSignUpDTO.getAboutMe());
-//        System.out.println("Received signupPlatform: " + userSignUpDTO.getSignupPlatform());
-//        System.out.println("Received nickName: " + userSignUpDTO.getNickName());
-//        System.out.println("Received selectedInterests: " + userSignUpDTO.getSelectedInterests());
 
         return ResponseEntity.ok("Sign up successful");
     }

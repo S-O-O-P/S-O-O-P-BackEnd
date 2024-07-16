@@ -96,7 +96,7 @@ public class ReissueController {
 
         // 새로운 액세스 토큰 발급
         String role = jwtUtil.getRoleFromRefreshToken(refreshToken);
-        String newAccessToken = jwtUtil.createJwt("access", signupPlatform, role, userCode, profilePic, 300L * 1000);
+        String newAccessToken = jwtUtil.createJwt("access", signupPlatform ,role, userCode, profilePic, 300L * 1000);
 
 
         createAndAddCookie(response, "access", newAccessToken);

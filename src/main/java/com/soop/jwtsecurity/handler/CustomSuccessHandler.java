@@ -39,6 +39,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String username = customUserDetails.getUsername();
         int userCode = userMapper.findBySignupPlatform(username).getUserCode();
         String profilePic = userMapper.findBySignupPlatform(username).getProfilePic();
+        String gender = userMapper.findBySignupPlatform(username).getGender();
 
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -47,7 +48,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String role = auth.getAuthority();
 
 
-        String access = jwtUtil.createJwt("access", username, role, userCode, profilePic, 300L * 1000); // 10분 (600초)
+        String access = jwtUtil.createJwt("access", username, role, userCode, profilePic, 300L * 1000); // 5분 (600초)
 
         String existingRefreshToken = userMapper.searchRefreshEntity(username);
 
@@ -62,11 +63,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         System.out.println("refresh = " + refresh);
         System.out.println("userCode = " + userCode);
 
-        // 리프레시 토큰을 HTTP-Only 쿠키로 저장
-//        createAndAddCookie(response, "refresh", refresh);
         // 엑세스 토큰을 쿠키로 저장
         createAndAddCookie(response, "access", access);
-//        createAndAddCookie(response, "username", username);
 
         UserEntity userEntity = new UserEntity();
 
@@ -92,12 +90,11 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private void createAndAddCookie(HttpServletResponse response, String key, String value) {
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(5 * 60); // 10분
+        cookie.setMaxAge(5 * 60); // 5분
         cookie.setDomain("localhost");
         cookie.setHttpOnly(false); // JavaScript에서 접근 가능하도록 설정
         cookie.setPath("/");
         cookie.setSecure(false); // localhost 환경에서는 false, 실제 배포 시 true로 설정
-
         response.addCookie(cookie);
 
         // SameSite 설정 추가
