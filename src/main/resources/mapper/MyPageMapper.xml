@@ -76,6 +76,11 @@
         <result property="ratingCode" column="RATING_CODE"/>
     </resultMap>
 
+    <select id="getUserRatings" resultMap="evaluateUserRatingResultMap">
+        SELECT * FROM USER_RATING
+        WHERE HONEYPOT_CODE = #{honeypotCode} AND RATER_CODE = #{raterCode}
+    </select>
+
     <!-- 유저평가 등록 -->
     <insert id="evaluateUserRating" parameterType="com.soop.pages.mypage.model.dto.UserRatingDTO">
         INSERT

@@ -77,4 +77,6 @@ GET http://localhost:8081/cultureinfo/early
 
 ### 테스트
 PUT http://localhost:8081/mypage/profile-pic/{{userCode}}
-http://localhost:3001/mypage/profile-pic/2
+
+### 유저평가 중복조회
+GET http://localhost:8081/mypage/userrating?honeypotCode=1&raterCode=4

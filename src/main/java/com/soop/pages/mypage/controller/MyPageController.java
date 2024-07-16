@@ -5,6 +5,7 @@ import com.soop.pages.mypage.model.dto.*;
 import com.soop.pages.mypage.model.service.MyPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.catalina.User;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,6 +35,14 @@ public class MyPageController {
     public ResponseEntity<List<UserRatingDTO>> getLoggedInUserRating(@PathVariable int userCode) {
         List<UserRatingDTO> loggedInUserRatingList = myPageService.getLoggedInUserRating(userCode);
         return ResponseEntity.ok(loggedInUserRatingList);
+    }
+
+    // 유저평가 중복확인
+    @GetMapping("/userrating")
+    public ResponseEntity<List<UserRatingDTO>> getUserRatingList(@RequestParam int honeypotCode,
+                                                                 @RequestParam int raterCode) {
+        List<UserRatingDTO> ratings = myPageService.getUserRatings(honeypotCode, raterCode);
+        return ResponseEntity.ok(ratings);
     }
 
     // 평점 항목 조회

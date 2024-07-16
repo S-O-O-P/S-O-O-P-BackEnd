@@ -156,4 +156,8 @@ public class MyPageService {
         dto.setProfilePic(profilePicUrl);
         myPageMapper.updateProfilePic(dto);
     }
+
+    public List<UserRatingDTO> getUserRatings(int honeypotCode, int raterCode) {
+        return myPageMapper.getUserRatings(honeypotCode, raterCode);
+    }
 }

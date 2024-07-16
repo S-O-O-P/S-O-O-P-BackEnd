@@ -50,4 +50,6 @@ public interface MyPageMapper {
     String getProfilePicFileName(Integer userCode);
 
     void updateProfilePicture(Integer userCode, String profilePicUrl);
+
+    List<UserRatingDTO> getUserRatings(@Param("honeypotCode") int honeypotCode, @Param("raterCode") int raterCode);
 }
