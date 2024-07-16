@@ -44,7 +44,7 @@
         NOTICE_CODE,
         TITLE
         FROM NOTICE
-        ORDER BY REG_DATE DESC
+        ORDER BY NOTICE_CODE DESC
         LIMIT 0,5;
     </select>
 
