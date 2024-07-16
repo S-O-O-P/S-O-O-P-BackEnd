@@ -26,9 +26,11 @@ public interface UserMapper {
     @Operation(summary = "리프레쉬 토큰 찾기", description = "")
     String searchRefreshEntity(String signupPlatform);
     @Operation(summary = "자기소개 저장", description = "")
-    void saveAboutMe(@Param("aboutme") String aboutme, @Param("signupPlatform") String signupPlatform,@Param("nickname") String nickname);
+    void saveAboutMe(@Param("aboutme") String aboutme, @Param("signupPlatform") String signupPlatform,@Param("nickname") String nickname,@Param("gender") String gender);
     @Operation(summary = "관심사 정보 저장", description = "")
     void saveUserInterest(@Param("userCode") int userCode, @Param("interestCode") int interestCode);
     @Operation(summary = "프로파일 사진 찾기", description = "")
     String getProfilePic(String signupPlatform);
+
+
 }

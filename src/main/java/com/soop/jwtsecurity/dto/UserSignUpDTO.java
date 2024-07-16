@@ -12,6 +12,7 @@ import java.util.List;
 public class UserSignUpDTO {
     private String aboutMe;
     private String nickName;
+    private String gender;
     private String signupPlatform;
     private List<Integer> selectedInterests;
 }

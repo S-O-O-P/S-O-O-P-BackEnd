@@ -47,7 +47,7 @@ public class JWTUtil {
         return getClaims(token).get("category", String.class);
     }
 
-    public String createJwt(String category, String signupPlatform, String role,int userCode, String profilePic, Long expiredMs) {
+    public String createJwt(String category, String signupPlatform, String role, int userCode, String profilePic , Long expiredMs) {
         return Jwts.builder()
                 .claim("category", category)
                 .claim("signupPlatform", signupPlatform)

@@ -84,7 +84,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Operation(summary = "성별 번역", description = "성별 ex)m,male = 남자")
     private String convertGender(String gender) {
         if (gender == null) {
-            return "구글일 경우 성별 입력받기 메소드 추가가 될 자리";
+            return "";
         }
         switch (gender.toLowerCase()) {
             case "m":
@@ -94,7 +94,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             case "female":
                 return "여자";
             default:
-                return "구글일 경우 성별 입력받기 메소드 추가가 될 자리";
+                return "";
         }
     }
 }

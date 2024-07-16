@@ -152,7 +152,8 @@
         update linkbee_user
         set ABOUTME = #{aboutme},
             NICKNAME = #{nickname},
-            SIGNUP_PLATFORM = #{signupPlatform}
+            SIGNUP_PLATFORM = #{signupPlatform},
+            GENDER = #{gender}
         where SIGNUP_PLATFORM = #{signupPlatform};
     </update>
 
