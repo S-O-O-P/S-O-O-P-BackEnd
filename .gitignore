@@ -4,7 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-
+!gradle-wrapper.properties
 ### STS ###
 .apt_generated
 .classpath
@@ -38,3 +38,4 @@ out/
 
 *.properties
 *.yml
+*/soop-profile-pic-firebase-adminsdk-25pru-9ab7c09212.json

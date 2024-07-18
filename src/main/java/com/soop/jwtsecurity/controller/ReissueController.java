@@ -1,136 +1,117 @@
 package com.soop.jwtsecurity.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soop.jwtsecurity.entityDTO.RefreshEntity;
 import com.soop.jwtsecurity.jwt.JWTUtil;
 import com.soop.jwtsecurity.mapper.UserMapper;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
+@Tag(name="토큰 재발급 컨트롤러")
 @Controller
 @ResponseBody
 public class ReissueController {
 
     private final JWTUtil jwtUtil;
-
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     public ReissueController(JWTUtil jwtUtil, UserMapper userMapper) {
-
         this.jwtUtil = jwtUtil;
         this.userMapper = userMapper;
     }
 
+    @Operation(summary = "토큰 재발급 REST API", description = "클라이언트 에게서 access토큰을 확인 DB에 저장된 refresh 토큰과 비교하여 재발급")
     @PostMapping("/reissue")
-    public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void reissue(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String accessToken = null;
+        Integer userCode = (Integer) requestBody.get("userCode");
 
-        //get refresh token
-        String refresh = null;
+        // 쿠키에서 액세스 토큰 추출
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-
-            if (cookie.getName().equals("refresh")) {
-
-                refresh = cookie.getValue();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("access".equals(cookie.getName())) {
+                    accessToken = cookie.getValue();
+                    break;
+                }
             }
         }
 
-        if (refresh == null) {
-
-            //response status code
-            return new ResponseEntity<>("refresh token null", HttpStatus.BAD_REQUEST);
+        // 액세스 토큰이 없으면 에러 처리
+        if (accessToken == null) {
+            response.sendRedirect("http://localhost:3001/login?error=access_token_missing");
+            return;
         }
 
-        //expired check
+        String signupPlatform = null;
         try {
-            jwtUtil.isExpired(refresh);
+            signupPlatform = jwtUtil.getSignupPlatformFromToken(accessToken);
         } catch (ExpiredJwtException e) {
-
-            //response status code
-            return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
+            response.sendRedirect("http://localhost:3001/login?error=access_token_expired");
+            return;
+        } catch (Exception e) {
+            response.sendRedirect("http://localhost:3001/login?error=invalid_access_token");
+            return;
         }
 
-        // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
-        String category = jwtUtil.getCategory(refresh);
-
-        if (!category.equals("refresh")) {
-
-            //response status code
-            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+        if (signupPlatform == null) {
+            response.sendRedirect("http://localhost:3001/login?error=invalid_signup_platform");
+            return;
         }
 
-        //DB에 저장되어 있는지 확인
-        Boolean isExist = userMapper.existsByRefresh(refresh);
-        if (!isExist) {
-
-            //response body
-            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+        // 서버 DB에서 해당 사용자의 리프레시 토큰 조회
+        String refreshToken = userMapper.searchRefreshEntity(signupPlatform);
+        if (refreshToken == null) {
+            response.sendRedirect("http://localhost:3001/login?error=refresh_token_missing");
+            return;
         }
 
-        String username = jwtUtil.getUsername(refresh);
-        String role = jwtUtil.getRole(refresh);
+        // 프로필 사진 정보 조회
+        String profilePic = userMapper.getProfilePic(signupPlatform);
 
-        //새로운 토큰 발급
-        String newAccess = jwtUtil.createJwt("access", username, role, 600L);
-
-        String existingRefreshToken = userMapper.searchRefreshEntity(username);
-
-        if (existingRefreshToken != null) {
-            // 기존 Refresh 토큰 삭제
-            userMapper.deleteByRefresh(existingRefreshToken);
+        // 리프레시 토큰 유효성 검사
+        try {
+            if (jwtUtil.isExpired(refreshToken)) {
+                response.sendRedirect("http://localhost:3001/login?error=refresh_token_expired");
+                return;
+            }
+        } catch (ExpiredJwtException e) {
+            response.sendRedirect("http://localhost:3001/login?error=refresh_token_expired");
+            return;
+        } catch (Exception e) {
+            response.sendRedirect("http://localhost:3001/login?error=invalid_refresh_token");
+            return;
         }
 
-        // 새로운 Refresh 토큰 생성
-        String newRefresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
+        // 새로운 액세스 토큰 발급
+        String role = jwtUtil.getRoleFromRefreshToken(refreshToken);
+        String newAccessToken = jwtUtil.createJwt("access", signupPlatform ,role, userCode, profilePic, 300L * 1000);
 
-        // 새로운 Refresh 토큰 저장
-        addRefreshEntity(username, newRefresh, 86400000L);
 
-        // Refresh 토큰을 쿠키에 추가
-        response.addCookie(createCookie("refresh", refresh));
+        createAndAddCookie(response, "access", newAccessToken);
 
-        //응답 설정
-        response.setHeader("Authorization", "Bearer " + newAccess);
         response.setStatus(HttpStatus.OK.value());
-
-
-        response.sendRedirect("http://localhost:3000/"); //프론트 url
-
-        return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    private void addRefreshEntity(String username, String refresh, Long expiredMs) {
-
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
-
-        RefreshEntity refreshEntity = new RefreshEntity();
-        refreshEntity.setUsername(username);
-        refreshEntity.setRefresh(refresh);
-        refreshEntity.setExpiration(date.toString());
-
-        userMapper.saveRefreshEntity(refreshEntity);
-    }
-    private Cookie createCookie(String key, String value) {
-
+    @Operation(summary = "쿠키 생성 메소드")
+    private void createAndAddCookie(HttpServletResponse response, String key, String value) {
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        //cookie.setSecure(true);
-        cookie.setPath("/");
+        cookie.setMaxAge(5 * 60); // 20 minutes
         cookie.setDomain("localhost");
-        cookie.setHttpOnly(true);
+        cookie.setHttpOnly(false); // JavaScript에서 접근 불가하도록 설정
+        cookie.setPath("/");
+        cookie.setSecure(false); // localhost 환경에서는 false, 실제 배포 시 true로 설정
 
-        return cookie;
+        response.addCookie(cookie);
     }
 }

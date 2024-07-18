@@ -3,6 +3,70 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.soop.pages.cultureinfo.model.dto.SampleDTO">
+<mapper namespace="com.soop.pages.cultureinfo.model.dao.CultureInfoMapper">
+    <resultMap id="cultureInfoEarlyBirdResultMap" type="com.soop.pages.cultureinfo.model.dto.CultureInfoDTO">
+        <id property="earlyBirdCode" column="EARLY_BIRD_CODE"/>
+        <id property="interestCode" column="INTEREST_CODE"/>
+        <id property="ebTitle" column="EB_TITLE"/>
+        <id property="ebContent" column="EB_CONTENT"/>
+        <id property="region" column="REGION"/>
+        <id property="poster" column="POSTER"/>
+        <id property="seller" column="SELLER"/>
+        <id property="sellerLink" column="SELLER_LINK"/>
+        <id property="regularPrice" column="REGULAR_PRICE"/>
+        <id property="discountPrice" column="DISCOUNT_PRICE"/>
+        <id property="saleStartDate" column="SALE_START_DATE"/>
+        <id property="saleEndDate" column="SALE_END_DATE"/>
+        <id property="usageStartDate" column="USAGE_START_DATE"/>
+        <id property="usageEndDate" column="USAGE_END_DATE"/>
+        <id property="ageLimit" column="AGE_LIMIT"/>
+        <id property="dateWritten" column="DATE_WRITTEN"/>
+        <id property="place" column="PLACE"/>
+    </resultMap>
 
+    <!--  얼리버드 공연/전시 정보 리스트 전체 조회  -->
+    <select id="selectAllCultureInfo" resultMap="cultureInfoEarlyBirdResultMap">
+        SELECT
+        EARLY_BIRD_CODE,
+        INTEREST_CODE,
+        EB_TITLE,
+<!--        EB_CONTENT,-->
+        REGION,
+        POSTER,
+<!--        SELLER,-->
+<!--        SELLER_LINK,-->
+        REGULAR_PRICE,
+        DISCOUNT_PRICE,
+        SALE_START_DATE,
+        SALE_END_DATE,
+        USAGE_START_DATE,
+        USAGE_END_DATE,
+        PLACE
+        FROM  EARLY_BIRD
+        ORDER BY DATE_WRITTEN DESC
+    </select>
+
+    <!--  얼리버드 공연/전시 상세 정보 조회  -->
+    <select id="selectEarlyInfoByEarlyBirdCode" resultMap="cultureInfoEarlyBirdResultMap">
+        SELECT
+        EARLY_BIRD_CODE,
+        INTEREST_CODE,
+        EB_TITLE,
+        EB_CONTENT,
+        REGION,
+        POSTER,
+        SELLER,
+        SELLER_LINK,
+        REGULAR_PRICE,
+        DISCOUNT_PRICE,
+        SALE_START_DATE,
+        SALE_END_DATE,
+        USAGE_START_DATE,
+        USAGE_END_DATE,
+        AGE_LIMIT,
+        DATE_WRITTEN,
+        PLACE
+        FROM  EARLY_BIRD
+        WHERE EARLY_BIRD_CODE=#{earlyCode}
+    </select>
 </mapper>

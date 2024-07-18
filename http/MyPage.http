@@ -1,0 +1,82 @@
+### 평점 계산이 되어있는 유저평점 정보 조회
+GET http://localhost:8081/mypage/rating/2
+
+### 유저평가 항목 조회
+GET http://localhost:8081/mypage/rating
+
+### 테스트
+GET http://localhost:8081/mypage
+
+### 평점 등록 테스트
+POST http://localhost:8081/mypage/userrating
+Content-Type: application/json
+
+{
+  "honeypotCode": 4,
+  "raterCode": 11,
+  "rateeCode": 8,
+  "ratingCode": 13
+}
+
+### 내가 만든 허니팟 조회
+GET http://localhost:8081/mypage/myhoneypots
+
+### 참여중인 허니팟 조회
+GET http://localhost:8081/mypage/participated
+
+### 유저 프로필 조회
+GET http://localhost:8081/mypage/1
+
+### 유저 프로필 수정
+PUT http://localhost:8081/mypage/1
+Content-Type: application/json
+
+{
+  "nickname": "바뀌어라얍11",
+  "aboutme": "바뀌어라얍얍얍11",
+  "interests": [
+    {
+      "interestCode": 2,
+      "interestName": "공연"
+    },
+    {
+      "interestCode": 4,
+      "interestName": "전시회"
+    }
+  ]
+}
+
+### 관심사 항목 조회
+GET http://localhost:8081/mypage/interest
+
+### 댓글 조회
+GET http://localhost:8081/mypage/mycomment
+
+### 문의 조회
+GET http://localhost:8081/mypage/myinquiry/2
+
+### 진행완료된 허니팟 조회
+GET http://localhost:8081/mypage/finished
+
+### 리프레쉬 조회
+GET http://localhost:8081/mypage/logincheck
+
+### 프로필 사진 수정
+PUT http://localhost:8081/mypage/1
+Content-Type: application/json
+
+{
+  "nickname": "새 닉네임",
+  "aboutme": "새 자기소개",
+  "profilePic": "koharu.PNG",
+  "interests": [1, 2, 3]
+}
+
+### 지혜님
+GET http://localhost:8081/cultureinfo/early
+
+### 테스트
+PUT http://localhost:8081/mypage/profile-pic/{{userCode}}
+
+### 유저평가 중복조회
+GET http://localhost:8081/mypage/userrating?honeypotCode=1&raterCode=4

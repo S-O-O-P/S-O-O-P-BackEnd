@@ -6,78 +6,185 @@
 <mapper namespace="com.soop.jwtsecurity.mapper.UserMapper">
 
     <resultMap id="user" type="com.soop.jwtsecurity.entityDTO.UserEntity">
-        <id property="id" column="id"/>
-        <result property="email" column="email"/>
-        <result property="name" column="name"/>
-        <result property="role" column="role"/>
-        <result property="username" column="username"/>
+        <id property="userCode" column="USER_CODE"/>
+        <result property="nickName" column="NICKNAME"/>
+        <result property="email" column="EMAIL"/>
+        <result property="gender" column="GENDER"/>
+        <result property="profilePic" column="PROFILE_PIC"/>
+        <result property="aboutMe" column="ABOUTME"/>
+        <result property="userRole" column="USER_ROLE"/>
+        <result property="signupDate" column="SIGNUP_DATE"/>
+        <result property="signupPlatform" column="SIGNUP_PLATFORM"/>
     </resultMap>
 
     <resultMap id="refresh" type="com.soop.jwtsecurity.entityDTO.RefreshEntity">
-        <id property="id" column="id"/>
-        <result property="username" column="username"/>
-        <result property="refresh" column="refresh"/>
-        <result property="expiration" column="expiration"/>
+        <id property="refreshCode" column="REFRESH_CODE"/>
+        <result property="userCode" column="USER_CODE"/>
+        <result property="signupPlatform" column="SIGNUP_PLATFORM"/>
+        <result property="refresh" column="REFRESH"/>
+        <result property="expiration" column="EXPIRATION"/>
     </resultMap>
 
-    <select id="findByUsername" resultType="com.soop.jwtsecurity.entityDTO.UserEntity">
+<!--    <select id="findUserCode" parameterType="com.soop.jwtsecurity.entityDTO.UserEntity">-->
+<!--        select-->
+<!--            user_code-->
+<!--        from linkbee_user-->
+<!--        where SIGNUP_PLATFORM = #{signupPlatform}-->
+<!--    </select>-->
+
+<!--    <resultMap id="interest" type="com.soop.pages.honeypot.model.dto.InterestDTO">-->
+<!--        <id property="interestCode" column="INTEREST_CODE"/>-->
+<!--        <result property="interestName" column="INTEREST_NAME"/>-->
+<!--        <association property="interestCode" column="INTEREST_CODE">-->
+<!--            <id property="userCode" column="USER_CODE"/>-->
+<!--        </association>-->
+<!--    </resultMap>-->
+
+    <select id="findBySignupPlatform" resultMap="user">
         select
-            username
-        from userentity
-        where username = #{username}
+            USER_CODE,
+            NICKNAME,
+            EMAIL,
+            GENDER,
+            PROFILE_PIC,
+            ABOUTME,
+            USER_ROLE,
+            SIGNUP_DATE,
+            SIGNUP_PLATFORM
+        from LINKBEE_USER
+        where SIGNUP_PLATFORM = #{signupPlatform}
+
     </select>
+
+<!--    <insert id="saveAboutMe" parameterType="com.soop.jwtsecurity.entityDTO.UserEntity">-->
+<!--        INSERT INTO LINKBEE_USER-->
+<!--        (-->
+<!--        ABOUTME-->
+<!--        )-->
+<!--        values-->
+<!--        (-->
+<!--        #{aboutMe}-->
+<!--        )-->
+<!--    </insert>-->
+
+<!--    <insert id="googleGender" parameterType="com.soop.jwtsecurity.entityDTO.UserEntity">-->
+<!--        INSERT INTO LINKBEE_USER-->
+<!--        (-->
+<!--        ABOUTME-->
+<!--        )-->
+<!--        GENDER-->
+<!--        (-->
+<!--        #{gender}-->
+<!--        )-->
+<!--    </insert>-->
+
 
 
     <insert id="saveUserEntity" parameterType="com.soop.jwtsecurity.entityDTO.UserEntity">
-        INSERT INTO userentity
+        INSERT INTO LINKBEE_USER
         (
-           email
-        ,   name
-        ,   role
-        ,   username
+        NICKNAME,
+        EMAIL,
+        GENDER,
+        PROFILE_PIC,
+        ABOUTME,
+        USER_ROLE,
+        SIGNUP_DATE,
+        SIGNUP_PLATFORM
         )
         values
         (
-           #{email}
-        ,   #{name}
-        ,   #{role}
-        ,   #{username}
+        #{nickName},
+        #{email},
+        #{gender},
+        #{profilePic},
+        #{aboutMe},
+        #{userRole},
+        #{signupDate},
+        #{signupPlatform}
         )
     </insert>
 
     <insert id="saveRefreshEntity" parameterType="com.soop.jwtsecurity.entityDTO.RefreshEntity">
-        INSERT INTO refreshentity
+        INSERT INTO REFRESHENTITY
         (
-
-           username
-        ,   refresh
-        ,   expiration
+        USER_CODE,
+        PROFILE_PIC,
+        SIGNUP_PLATFORM,
+        REFRESH,
+        EXPIRATION
         )
-        values
-        (
-           #{username}
-        ,   #{refresh}
-        ,   #{expiration}
-        )
+        SELECT
+        USER_CODE,
+        #{profilePic},
+        #{signupPlatform},
+        #{refresh},
+        #{expiration}
+        FROM LINKBEE_USER
+        WHERE SIGNUP_PLATFORM = #{signupPlatform}
+        ON DUPLICATE KEY UPDATE
+        REFRESH = VALUES(REFRESH),
+        EXPIRATION = VALUES(EXPIRATION)
     </insert>
 
     <select id="searchRefreshEntity" parameterType="com.soop.jwtsecurity.entityDTO.RefreshEntity">
-        select A.refresh
-        from refreshentity A
-        join userentity B on A.username = B.username
-        where A.username = #{username}
+        select
+                A.REFRESH,
+                B.PROFILE_PIC
+            from REFRESHENTITY A
+            join LINKBEE_USER B on A.SIGNUP_PLATFORM = B.SIGNUP_PLATFORM
+        where A.SIGNUP_PLATFORM = #{signupPlatform}
     </select>
 
-    <select id="existsByRefresh" parameterType="com.soop.jwtsecurity.entityDTO.RefreshEntity">
+    <select id="existsByRefresh" parameterType="String" resultType="Boolean">
         select
-            refresh
-        from refreshentity
-        where refresh = #{refresh}
+            case when count(*) > 0 then true else false end
+            from REFRESHENTITY
+        where REFRESH = #{refresh}
     </select>
 
     <delete id="deleteByRefresh" parameterType="com.soop.jwtsecurity.entityDTO.RefreshEntity">
-        delete from refreshentity
-           where refresh = #{refresh}
+        delete from REFRESHENTITY
+        where REFRESH = #{refresh}
     </delete>
+
+    <update id="saveAboutMe" parameterType="com.soop.jwtsecurity.entityDTO.UserEntity">
+        update linkbee_user
+        set ABOUTME = #{aboutme},
+            NICKNAME = #{nickname},
+            SIGNUP_PLATFORM = #{signupPlatform},
+            GENDER = #{gender}
+        where SIGNUP_PLATFORM = #{signupPlatform};
+    </update>
+
+    <select id="findAboutMe" resultMap="user">
+        select
+         ABOUTME
+        from LINKBEE_USER
+        where SIGNUP_PLATFORM = #{signupPlatform}
+    </select>
+
+    <insert id="saveUserInterest">
+        INSERT INTO INTEREST_OF_USER
+        (
+            USER_CODE,
+            INTEREST_CODE
+        )
+        VALUES
+        (
+            #{userCode}
+        ,   #{interestCode}
+        )
+    </insert>
+
+    <!-- 프로필 사진 추가 -->
+    <select id="getProfilePic" parameterType="string" resultType="string">
+        SELECT
+                B.PROFILE_PIC
+          FROM REFRESHENTITY A
+          JOIN LINKBEE_USER B on A.SIGNUP_PLATFORM = B.SIGNUP_PLATFORM
+        where A.SIGNUP_PLATFORM = #{signupPlatform}
+    </select>
+
 
 </mapper>

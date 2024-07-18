@@ -1,0 +1,117 @@
+### 허니팟 등록 테스트
+POST http://localhost:8081/honeypot/regist
+Content-Type: application/json
+
+{
+  "closureStatus": "모집중",
+  "endDate" : "2024-07-18",
+  "eventDate" : "2024-07-19",
+  "honeypotContent" : "유유유유유유유유 매그내릭",
+  "honeypotTitle" : "인천시립교향악단 정기연주회 들으실분",
+  "hostCode" : 1,
+  "interestCode" : 2,
+  "poster" : "http://www.culture.go.kr/upload/rdf/24/06/show_2024062117492088266.jpg",
+  "regDate" : "2024-07-08T08:02:34.050Z",
+  "region" : "인천",
+  "seqNo" : "280439",
+  "totalMember" : 2,
+  "visibilityStatus" : "활성화"
+}
+
+### 허니팟 전체 조회 테스트
+GET http://localhost:8081/honeypot/list
+
+### 허니팟 상세 조회 테스트
+GET http://localhost:8081/honeypot/detail/20
+
+### 허니팟 임시 조회 테스트
+GET http://localhost:8081/honeypot/detail/temporary/1
+
+### 허니팟 수정 테스트
+PUT http://localhost:8081/honeypot/modify/1
+Content-Type: application/json
+
+{
+    "honeypotTitle": "수정된 허니팟 제목",
+    "honeypotContent": "수정된 허니팟 내용",
+    "eventDate": "2024-07-22",
+    "endDate": "2024-07-21",
+    "totalMember": 3,
+    "closureStatus": "모집완료"
+}
+
+### 허니팟 삭제 테스트
+DELETE http://localhost:8081/honeypot/delete/4
+
+### 댓글 전체 조회 테스트
+GET http://localhost:8081/honeypot/comment
+
+### 댓글코드로 댓글 조회 테스트
+GET http://localhost:8081/honeypot/comment/30
+
+### 댓글 수정 테스트
+PUT http://localhost:8081/honeypot/comment/27
+Content-Type: application/json
+
+{
+  "commentCode": 27,
+  "content": "수정된 댓글 내용입니다.",
+  "updateTime": "2024-07-03T15:30:00"
+}
+
+### 댓글 삭제 테스트
+DELETE http://localhost:8081/honeypot/comment/1
+
+### 댓글 등록 테스트
+POST http://localhost:8081/honeypot/comment
+Content-Type: application/json
+
+{
+  "honeypotCode": 3,
+  "writerInfo": {
+    "userCode": 10
+  },
+  "content": "테스트 댓글입니다.",
+  "writingTime": "2024-07-01T12:00:02",
+  "updateTime": null
+}
+
+### 참가신청 등록 테스트(참가승인으로 자동 등록)
+POST http://localhost:8081/honeypot/application
+Content-Type: application/json
+
+{
+  "honeypotCategory": {
+    "honeypotCode": 7
+  },
+  "userCategory": {
+    "userCode": 8
+  },
+  "applicationDate": "2024-07-11"
+}
+
+### 특정 허니팟의 참가신청 목록 조회
+GET http://localhost:8081/honeypot/application/7
+
+
+### 특정 허니팟의 참가신청 목록 개별 조회(참가신청 코드순)
+GET http://localhost:8081/honeypot/application/7/8
+
+### 승인여부 변경 테스트
+PUT http://localhost:8081/honeypot/application/8/6
+Content-Type: application/json
+
+{
+  "decisionStatus": "승인완료",
+  "decisionDate": "2024-07-05T10:00:00Z"
+}
+
+### 참가인원 카운터 테스트
+GET http://localhost:8081/honeypot/listandapproved
+
+### 얼리버드 정보 조회
+GET http://localhost:8081/cultureInfo/early
+
+### 허니팟 신고 기능
+PUT http://localhost:8081/honeypot/report/4
+Content-Type: application/json
