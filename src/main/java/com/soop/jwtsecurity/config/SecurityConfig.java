@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .successHandler(customSuccessHandler)
         );
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/**").permitAll()
+                .requestMatchers("/**").permitAll() // 추후 도메인 선정 후 변경
                 .anyRequest().authenticated()
         );
         http.sessionManagement(session -> session

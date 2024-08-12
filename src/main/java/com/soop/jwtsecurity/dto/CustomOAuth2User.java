@@ -2,7 +2,6 @@
 package com.soop.jwtsecurity.dto;
 
 import com.soop.jwtsecurity.entityDTO.UserEntity;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;

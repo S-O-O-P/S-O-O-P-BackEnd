@@ -53,6 +53,7 @@ public class JWTFilter extends OncePerRequestFilter {
             }
         } catch (ExpiredJwtException e) {
             String refreshToken = userMapper.searchRefreshEntity(jwtUtil.getSignupPlatformFromToken(accessToken));
+
             if (refreshToken != null && jwtUtil.validateRefreshToken(refreshToken)) {
                 String username = jwtUtil.getUsernameFromRefreshToken(refreshToken);
                 String role = jwtUtil.getRoleFromRefreshToken(refreshToken);

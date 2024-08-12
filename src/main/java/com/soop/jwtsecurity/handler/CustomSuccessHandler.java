@@ -59,10 +59,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String refresh = jwtUtil.createJwt("refresh", username, role, userCode, profilePic, 86400L *1000); // 24시간 (86400000밀리초)
         addRefreshEntity(username, refresh, 86400L*1000);
 
-        System.out.println("access = " + access);
-        System.out.println("refresh = " + refresh);
-        System.out.println("userCode = " + userCode);
-
         // 엑세스 토큰을 쿠키로 저장
         createAndAddCookie(response, "access", access);
 
@@ -74,7 +70,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         }else {
             response.sendRedirect("http://localhost:3001/main");
         }
-
 
     }
 
@@ -94,7 +89,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         cookie.setDomain("localhost");
         cookie.setHttpOnly(false); // JavaScript에서 접근 가능하도록 설정
         cookie.setPath("/");
-        cookie.setSecure(false); // localhost 환경에서는 false, 실제 배포 시 true로 설정
+        cookie.setSecure(true); // localhost 환경에서는 false, 실제 배포 시 true로 설정
         response.addCookie(cookie);
 
         // SameSite 설정 추가

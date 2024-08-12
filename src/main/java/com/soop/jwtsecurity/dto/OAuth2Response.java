@@ -2,8 +2,6 @@ package com.soop.jwtsecurity.dto;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import java.util.Date;
-
 @Tag(name = "Oauth2 응답 인터페이스")
 public interface OAuth2Response {
 
