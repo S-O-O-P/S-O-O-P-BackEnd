@@ -2,8 +2,6 @@ package com.soop.jwtsecurity.dto;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import java.util.Date;
-
 @Tag(name = "Oauth2 응답 인터페이스")
 public interface OAuth2Response {
 
@@ -15,9 +13,9 @@ public interface OAuth2Response {
     String getEmail();
     //사용자 실명 (설정한 이름)
     String getNickName();
-
+    //성별
     String getGender();
-
+    //프로필 이미지
     String getProfileImage();
 
 

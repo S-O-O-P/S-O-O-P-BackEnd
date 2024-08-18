@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
 
 @Tag(name = "리프레시 토큰 DTO")
 @Getter

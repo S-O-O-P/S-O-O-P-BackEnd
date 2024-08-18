@@ -24,21 +24,30 @@ import java.util.Map;
 @RestController
 @RequestMapping("/main")
 public class MainController {
+
   private final MainService mainService;
 
-  public MainController(MainService mainService) {this.mainService = mainService;}
+  // 생성자 주입을 통해 MainService를 주입
+  public MainController(MainService mainService) {
+    this.mainService = mainService;
+  }
 
   @Operation(summary = "회원 관심사 조회", description = "회원이 등록한 관심사를 조회합니다.")
   @Parameter(name = "userCode", description = "로그인한 회원 코드 번호", in = ParameterIn.PATH)
   @GetMapping("/interest/{userCode}")
   public ResponseEntity<Map<String, Object>> getInterestList(@PathVariable int userCode) {
+    // 응답 헤더 설정
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
-    List<UserInterestDTO> interestList = mainService.selectUserInterestByCode(userCode); // 해당 회원의 관심사 리스트 조회
-    Map<String, Object> responseMap = new HashMap<>();
-    responseMap.put("interestList", interestList); // 응답 데이터 저장
+    // 해당 회원의 관심사 리스트 조회
+    List<UserInterestDTO> interestList = mainService.selectUserInterestByCode(userCode);
 
+    // 응답 데이터 저장
+    Map<String, Object> responseMap = new HashMap<>();
+    responseMap.put("interestList", interestList);
+
+    // 응답 반환
     return new ResponseEntity<>(responseMap, headers, HttpStatus.OK);
   }
 }

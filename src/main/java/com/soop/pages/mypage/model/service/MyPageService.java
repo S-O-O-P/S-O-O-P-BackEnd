@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,52 +20,61 @@ import java.util.stream.Collectors;
 
 @Service
 public class MyPageService {
-
-    private MyPageMapper myPageMapper;
+    private final MyPageMapper myPageMapper;
     private static final Logger logger = LoggerFactory.getLogger(MyPageService.class);
 
+    // 생성자 주입을 통해 MyPageMapper를 초기화
     public MyPageService(MyPageMapper myPageMapper) {
         this.myPageMapper = myPageMapper;
     }
 
+    // 로그인한 사용자의 평가 정보를 조회
     public List<UserRatingDTO> getLoggedInUserRating(int userCode) {
         return myPageMapper.getLoggedInUserRating(userCode);
     }
 
+    // 사용자의 평가를 추가
     public EvaluateUserRatingDTO evaluateUserRating(EvaluateUserRatingDTO newEvaluate) {
-
         myPageMapper.evaluateUserRating(newEvaluate);
         return newEvaluate;
     }
 
+    // 평가 항목 리스트를 조회
     public List<RatingDTO> getRatingList() {
         return myPageMapper.getRatingList();
     }
 
+    // 사용자가 만든 허니팟 리스트를 조회
     public List<MyHoneypotDTO> getMyHoneypotList() {
         return myPageMapper.getMyHoneypotList();
     }
 
+    // 사용자가 참여 중인 허니팟 리스트를 조회
     public List<ParticipatingHoneypotDTO> getParticipatingHoneypotList() {
         return myPageMapper.getParticipatingHoneypotList();
     }
 
+    // 사용자가 작성한 댓글 리스트를 조회
     public List<MyCommentDTO> getMyComments() {
         return myPageMapper.getMyComments();
     }
 
+    // 사용자가 작성한 문의 내역을 조회
     public List<MyInquiryDTO> getMyInquiry(int userCode) {
         return myPageMapper.getMyInquiry(userCode);
     }
 
+    // 완료된 허니팟 리스트를 조회
     public List<FinishedHoneypotDTO> getFinishedHoneypot() {
         return myPageMapper.getFinishedHoneypot();
     }
 
+    // 관심사 리스트를 조회
     public List<InterestDTO> getInterest() {
         return myPageMapper.getInterest();
     }
 
+    // 사용자 프로필 정보를 조회
     public UserProfileDTO getUserProfile(Integer userCode) {
         return myPageMapper.getUserProfile(userCode);
     }
@@ -86,15 +94,17 @@ public class MyPageService {
 //    }
 
     public List<RefreshDTO> getUserRef() {
+        // 사용자 참조 정보를 조회
         return myPageMapper.getUserRef();
     }
 
     @Value("${file.upload-dir}")
     private String uploadDir;
     public String updateProfilePic(Integer userCode, MultipartFile file) throws IOException {
-
+        // 파일 이름 생성 (UUID와 원본 파일 이름을 조합)
         String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 
+        // 업로드 디렉토리 경로 설정 및 디렉토리가 존재하지 않으면 생성
         Path uploadPath = Paths.get(uploadDir);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
@@ -104,7 +114,10 @@ public class MyPageService {
         Path filePath = uploadPath.resolve(fileName);
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
+        // 프로필 사진 URL 생성
         String profilePicUrl = "/images/mypage/saveProfilePic/" + fileName;
+
+        // 프로필 사진 정보를 DTO에 설정하고 DB를 업데이트
         ProfilePicUpdateDTO profileUpdateDTO = new ProfilePicUpdateDTO();
         profileUpdateDTO.setUserCode(userCode);
         profileUpdateDTO.setProfilePic(profilePicUrl);
@@ -136,6 +149,7 @@ public class MyPageService {
         updateProfile.setAboutme(dto.getAboutme());
         updateProfile.setInterests(dto.getInterests());
 
+        // 사용자 프로필을 DB에서 업데이트
         myPageMapper.updateProfile(updateProfile);
 
         // 관심사 업데이트
@@ -146,11 +160,12 @@ public class MyPageService {
                     .collect(Collectors.toList());
             myPageMapper.insertUserInterests(userCode, interestCodes);
         }
-
+        // 업데이트된 사용자 프로필 정보를 반환
         return myPageMapper.getUserProfile(userCode);
     }
 
     public void updateProfilePicture(Integer userCode, String profilePicUrl) {
+        // 프로필 사진 URL을 업데이트
         ProfilePicUpdateDTO dto = new ProfilePicUpdateDTO();
         dto.setUserCode(userCode);
         dto.setProfilePic(profilePicUrl);
@@ -158,6 +173,7 @@ public class MyPageService {
     }
 
     public List<UserRatingDTO> getUserRatings(int honeypotCode, int raterCode) {
+        // 특정 허니팟과 평가자를 기준으로 사용자 평가 리스트를 조회
         return myPageMapper.getUserRatings(honeypotCode, raterCode);
     }
 }

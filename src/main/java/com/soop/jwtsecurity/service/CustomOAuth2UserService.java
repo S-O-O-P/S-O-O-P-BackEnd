@@ -1,4 +1,3 @@
-
 package com.soop.jwtsecurity.service;
 
 import com.soop.jwtsecurity.dto.*;
@@ -19,8 +18,10 @@ import java.util.Date;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
+    // UserMapper를 사용하여 데이터베이스와의 상호작용을 처리
     private final UserMapper userMapper;
 
+    // UserMapper를 주입하는 생성자
     public CustomOAuth2UserService(UserMapper userMapper) {
         this.userMapper = userMapper;
     }
@@ -30,11 +31,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
+        // 부모 클래스의 loadUser 메서드를 사용하여 OAuth2User 정보를 가져옴
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
+        // 클라이언트 등록 ID를 가져옴 (예: naver, google, kakao)
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2Response oAuth2Response = null;
 
+        // 플랫폼에 따라 적절한 OAuth2Response 구현체를 선택
         if (registrationId.equals("naver")) {
             oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
         } else if (registrationId.equals("google")) {
@@ -42,13 +46,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         } else if (registrationId.equals("kakao")) {
             oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
         } else {
-            return null;
+            return null; // 지원하지 않는 플랫폼일 경우 null 반환
         }
 
-        String signupPlatform = oAuth2Response.getProvider() +":"+ oAuth2Response.getProviderId();
+        // 가입 플랫폼을 생성 (예: google:123456789)
+        String signupPlatform = oAuth2Response.getProvider() + ":" + oAuth2Response.getProviderId();
 //        System.out.println("signupPlatform = " + signupPlatform);
+
+        // 데이터베이스에서 해당 사용자가 존재하는지 확인
         UserEntity existData = userMapper.findBySignupPlatform(signupPlatform);
 
+        // 사용자가 존재하지 않을 경우 새 사용자 등록
         if (existData == null) {
             UserEntity userEntity = new UserEntity();
             userEntity.setSignupPlatform(signupPlatform);
@@ -60,6 +68,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userEntity.setGender(convertGender(oAuth2Response.getGender() != null ? oAuth2Response.getGender() : "구글일 경우 성별 입력받기 메소드 추가가 될 자리"));
             userEntity.setSignupDate(new Date());
 
+            // 사용자 정보를 데이터베이스에 저장
             userMapper.saveUserEntity(userEntity);
 
             UserEntity userDTO = new UserEntity();
@@ -67,8 +76,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userDTO.setNickName(oAuth2Response.getNickName());
             userDTO.setUserRole("ROLE_USER");
 
+            // 새 사용자 정보를 반환
             return new CustomOAuth2User(userDTO);
         } else {
+            // 기존 사용자가 있을 경우 정보를 업데이트
             existData.setEmail(oAuth2Response.getEmail());
             existData.setNickName(oAuth2Response.getNickName());
             UserEntity userDTO = new UserEntity();
@@ -78,10 +89,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userDTO.setSignupPlatform(existData.getSignupPlatform());
             userDTO.setUserRole(existData.getUserRole());
 
+            // 기존 사용자 정보를 반환
             return new CustomOAuth2User(userDTO);
         }
     }
+
     @Operation(summary = "성별 번역", description = "성별 ex)m,male = 남자")
+    // 성별 정보를 번역하는 메서드
     private String convertGender(String gender) {
         if (gender == null) {
             return "";

@@ -4,10 +4,8 @@ import com.soop.jwtsecurity.entityDTO.RefreshEntity;
 import com.soop.jwtsecurity.entityDTO.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Update;
 
 @Tag(name = "XML 맵퍼")
 @Mapper
