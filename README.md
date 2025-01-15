@@ -1,7 +1,7 @@
 # Read Me
 # 프로젝트 제목
 ```markdown
-Early Bud (얼리 벗 : 얼리버드 친구)
+LinkBee 링크비
 ```
 
 # 프로젝트 정보
